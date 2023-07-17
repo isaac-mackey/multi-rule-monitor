@@ -1,0 +1,7 @@
+rule_0 = Rule(
+    rule_id=0,
+    body=[  EventAtom("read", ["v1", "v2"], "x"),
+            EventAtom("check_faq", ["v3"], "y")],
+    head=[  EventAtom("open_trust", ["v1"], "z"),
+            ArithmeticAtom("x < z")],
+)

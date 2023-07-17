@@ -1,0 +1,8 @@
+rule_0 = Rule(
+    rule_id=0,
+    body=[  EventAtom("E1", ["v1"], "x"),
+            EventAtom("E2", ["v3"], "y")],
+    head=[  EventAtom("E3", ["v2"], "z"),
+            EventAtom("E4", ["v3"], "w"),
+            ArithmeticAtom("x + 1 == z")],
+)

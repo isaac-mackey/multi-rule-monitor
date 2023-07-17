@@ -1,0 +1,8 @@
+small_rule_1 = Rule(
+    rule_id=s1,
+    body=[  EventAtom("read", ["v1", "v2"], "x"),
+            EventAtom("open_support", ["v1"], "z"),
+            ArithmeticAtom("x + 1 <= z") ],
+    head=[  ,
+            EventAtom("open_trust", ["v1"], "w") ]
+)

@@ -1,0 +1,10 @@
+medium_rule_2 = Rule(
+    rule_id=m2,
+    body=[  EventAtom("read", ["v1", "v2"], "x"),
+            EventAtom("open_support", ["v1"], "y"),
+     ],
+    head=[  EventAtom("check_faq", ["v3"], "v"),
+            EventAtom("open_trust", ["v3"], "z"),
+            ArithmeticAtom("v + 5 < z")
+     ]
+)
