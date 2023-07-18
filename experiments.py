@@ -9,7 +9,7 @@ if __name__ == "__main__":
     
     log_file_groups = {
         "test": [
-            # "a-e=975----c=10----b=10.txt",
+            "a-e=975----c=10----b=10.txt",
             # "a-e=975----c=10----b=50.txt",
             # "a-e=975----c=10----b=100.txt",
             # "a-e=975----c=10----b=500.txt",
@@ -23,7 +23,7 @@ if __name__ == "__main__":
             # "a-e=731----c=100---b=500.txt",
             # "a-e=5000---c=500---b=10.txt",
             # "a-e=5000---c=500---b=50.txt",
-            "a-e=5000---c=500---b=100.txt",
+            # "a-e=5000---c=500---b=100.txt",
             # "a-e=5000---c=500---b=500.txt",
             # "a-e=5000---c=500---b=1000.txt",
             # "a-e=5000---c=1000---b=10.txt",
@@ -109,15 +109,23 @@ if __name__ == "__main__":
                 "num=1--overlap=0": [ "rules/num=1--overlap=0" ], 
                 "num=2--overlap=1": [ "rules/num=2--overlap=1" ], 
                 "num=2--overlap=2": [ "rules/num=2--overlap=2" ], 
+                "num=2--overlap=3": [ "rules/num=2--overlap=3" ], 
                 "num=2--overlap=4": [ "rules/num=2--overlap=4" ], 
+                'num=2--overlap=4a': [ 'rules/num=2--overlap=4a' ],
                 "num=3--overlap=0": [ "rules/num=3--overlap=0" ], 
                 "num=3--overlap=1": [ "rules/num=3--overlap=1" ], 
                 "num=3--overlap=2": [ "rules/num=3--overlap=2" ], 
                 "num=3--overlap=3": [ "rules/num=3--overlap=3" ], 
+                'num=3--overlap=3a': [ 'rules/num=3--overlap=3a' ],
+                "num=3--overlap=4": [ "rules/num=3--overlap=4" ], 
                 "num=4--overlap=0": [ "rules/num=4--overlap=0" ], 
                 "num=4--overlap=1": [ "rules/num=4--overlap=1" ], 
                 "num=4--overlap=2": [ "rules/num=4--overlap=2" ], 
-                "num=4--overlap=3": [ "rules/num=4--overlap=3" ], 
+                "num=4--overlap=3": [ "rules/num=4--overlap=3" ],
+                'num=4--overlap=3a': [ 'rules/num=4--overlap=3a' ],
+                'num=4--overlap=3b': [ 'rules/num=4--overlap=3b' ],
+                "num=4--overlap=4": [ "rules/num=4--overlap=4" ], 
+                "num=4--overlap=5": [ "rules/num=4--overlap=5" ],
     }
 
     test_rule_group = [ "medium" ]
@@ -128,21 +136,27 @@ if __name__ == "__main__":
 
     overlap = [ "shared-atoms-1", "shared-atoms-2", "shared-atoms-3" ]
     overlap = [ 
-                # "num=1--overlap=0",
-                # "num=2--overlap=1",
-                # "num=2--overlap=2",
-                # "num=2--overlap=4",
-                # "num=3--overlap=0",
-                # "num=3--overlap=1",
-                # "num=3--overlap=2",
-                # "num=3--overlap=3",
-                "num=4--overlap=0",
-                "num=4--overlap=1",
-                "num=4--overlap=2",
-                "num=4--overlap=3",
+                # "num=1--overlap=0", 
+                # "num=2--overlap=1", 
+                # "num=2--overlap=2", 
+                # "num=2--overlap=3", 
+                # "num=2--overlap=4", 
+                "num=3--overlap=0", 
+                "num=3--overlap=1", 
+                "num=3--overlap=2", 
+                "num=3--overlap=3", 
+                'num=3--overlap=3a',
+                "num=3--overlap=4", 
+                "num=4--overlap=0", 
+                "num=4--overlap=1", 
+                "num=4--overlap=2", 
+                "num=4--overlap=3", 
+                'num=4--overlap=3a',
+                "num=4--overlap=4", 
+                "num=4--overlap=5", 
     ]
     
-    df = pd.DataFrame([], columns=["log-file", "rule-set", "batch-size", "conc", "ave-time"])
+    df = pd.DataFrame([], columns=["log-file", "num-events", "conc", "batch-size",  "rule-set", "num-rules", "overlap", "ave-time"])
 
     experiment_number = 3
 
@@ -185,6 +199,11 @@ if __name__ == "__main__":
                                 if b.predicate == h.predicate:
                                     head_to_body_overlap += 1
 
+            # print(rule_set)
+            # print(head_to_body_overlap)
+            # print()
+            # continue
+
             monitor = Monitor(rules=parsed_rules)
 
             # print date and time
@@ -200,9 +219,8 @@ if __name__ == "__main__":
             num_events = len(batch_processing_times) * monitor.batch_size
             concurrency = int(matches[1])
             batch_size = int(matches[2])
-            rule_set += '('+str(len(rule_set_names[rule_set]))+')'
-
-            new_row = {"log-file": log, "rule-set": rule_set, "num-events": num_events, "conc": concurrency, "batch-size": monitor.batch_size, "overlap": head_to_body_overlap, "ave-time": average}
+            num_rules = len(parsed_rules)
+            new_row = {"log-file": log, "num-events": num_events, "conc": concurrency, "batch-size": monitor.batch_size, "rule-set": rule_set, "num-rules": num_rules, "overlap": head_to_body_overlap, "ave-time": average}
             batch_size_values.append(monitor.batch_size)
             concurrency_values.append(concurrency) 
             
@@ -216,25 +234,24 @@ if __name__ == "__main__":
     print("Date and time: {}".format(datetime.datetime.now()))
     print(df.to_string())
 
-    result = ""
-    result += "Batch Size & "
-    concurrency_values = sorted(list(set(concurrency_values)))
-    batch_size_values = sorted(list(set(batch_size_values)))
-    for concurrency in concurrency_values:
-        result += "C="+str(concurrency)+" & "
-    result = result[:-3] + "\n"
-    for batch_size in batch_size_values:
-        result += str(batch_size)+" & "
-        for concurrency in concurrency_values:
-            filtered_df = df[(df['batch-size'] == batch_size) & (df['conc'] == concurrency)]
-            average_value = 0
-            for index, row in filtered_df.iterrows():
-                average_value += row['ave-time']
-            if len(filtered_df.index):
-                average_value /= len(filtered_df.index)
-                result += str(average_value) + " & "
-            else:
-                result += "X & "
-        result = result[:-3] + "\n"
-
-    print(result)
+    # result = ""
+    # result += "Batch Size & "
+    # concurrency_values = sorted(list(set(concurrency_values)))
+    # batch_size_values = sorted(list(set(batch_size_values)))
+    # for concurrency in concurrency_values:
+    #     result += "C="+str(concurrency)+" & "
+    # result = result[:-3] + "\n"
+    # for batch_size in batch_size_values:
+    #     result += str(batch_size)+" & "
+    #     for concurrency in concurrency_values:
+    #         filtered_df = df[(df['batch-size'] == batch_size) & (df['conc'] == concurrency)]
+    #         average_value = 0
+    #         for index, row in filtered_df.iterrows():
+    #             average_value += row['ave-time']
+    #         if len(filtered_df.index):
+    #             average_value /= len(filtered_df.index)
+    #             result += str(average_value) + " & "
+    #         else:
+    #             result += "X & "
+    #     result = result[:-3] + "\n"
+    # print(result)
