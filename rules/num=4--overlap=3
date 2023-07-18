@@ -6,7 +6,7 @@ small_rule_1 = Rule(
 
 small_rule_2 = Rule(
     rule_id=s2,
-    body=[  EventAtom("check_faq", ["v1", "v2"], "x") ],
+    body=[  EventAtom("check_faq", ["v1"], "x") ],
     head=[  EventAtom("open_trust", ["v1"], "z"),
             ArithmeticAtom("x < z") ]
 )
@@ -20,6 +20,6 @@ small_rule_3 = Rule(
 
 small_rule_4 = Rule(
     rule_id=s4,
-    body=[  EventAtom("open_trust", ["v1", "v2"], "x") ],
+    body=[  EventAtom("open_trust", ["v1"], "x") ],
     head=[  EventAtom("open_support", ["v1"], "z") ]
 )
