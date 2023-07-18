@@ -10,13 +10,13 @@ small_rule_2 = Rule(
     rule_id=s2,
     body=[  EventAtom("open_support", ["v1"], "x") ],
 
-    head=[  EventAtom("open_trust", ["v1"], "w"),
+    head=[  EventAtom("check_faq", ["v1"], "w"),
             ArithmeticAtom("x < w") ]
 )
 
 small_rule_3 = Rule(
     rule_id=s3,
-    body=[  EventAtom("read", ["v1", "v2"], "x") ],
-    head=[  EventAtom("open_trust", ["v1"], "z"),
+    body=[  EventAtom("open_trust", ["v1"], "x") ],
+    head=[  EventAtom("send_response", ["v1"], "z"),
             ArithmeticAtom("x < z") ]
 )

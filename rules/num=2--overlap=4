@@ -1,6 +1,6 @@
 small_rule_1 = Rule(
     rule_id=s1,
-    body=[      EventAtom("read", ["v1", "v2"], "x") ]
+    body=[      EventAtom("read", ["v1", "v2"], "x") ],
     head=[      EventAtom("open_trust", ["v1"], "w"),
                 ArithmeticAtom("x < w"),
                 EventAtom("open_support", ["v1"], "z"),
@@ -13,12 +13,12 @@ small_rule_1 = Rule(
 small_rule_2 = Rule(
     rule_id=s2,
     body=[  EventAtom("open_trust", ["v1"], "w"),
-                ArithmeticAtom("x < w"),
-                EventAtom("open_support", ["v1"], "z"),
-                EventAtom("check_faq", ["v1"], "y"),
-                ArithmeticAtom("y < z"),
-                EventAtom("send_response", ["v1"], "v") ]
+            ArithmeticAtom("x < w"),
+            EventAtom("open_support", ["v1"], "z"),
+            EventAtom("check_faq", ["v1"], "y"),
+            ArithmeticAtom("y < z"),
+            EventAtom("send_response", ["v1"], "v") ],
     head=[  ArithmeticAtom("y + 1 < z"),
-                ArithmeticAtom("w + 1 < v"),
+            ArithmeticAtom("w + 1 < v"),
     ]
 )
