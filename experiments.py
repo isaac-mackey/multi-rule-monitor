@@ -9,10 +9,10 @@ if __name__ == "__main__":
     
     log_file_groups = {
         "test": [
-            # "a-e=975----c=10----b=10.txt",
-            # "a-e=975----c=10----b=50.txt",
-            # "a-e=975----c=10----b=100.txt",
-            # "a-e=975----c=10----b=500.txt",
+            "a-e=975----c=10----b=10.txt",
+            "a-e=975----c=10----b=50.txt",
+            "a-e=975----c=10----b=100.txt",
+            "a-e=975----c=10----b=500.txt",
             # "a-e=765----c=43---b=10.txt",
             # "a-e=765----c=43---b=50.txt",
             # "a-e=765----c=43---b=100.txt",
@@ -21,11 +21,11 @@ if __name__ == "__main__":
             # "a-e=731----c=100---b=50.txt",
             # "a-e=731----c=100---b=100.txt",
             # "a-e=731----c=100---b=500.txt",
-            "a-e=5000---c=500---b=10.txt",
-            "a-e=5000---c=500---b=50.txt",
-            "a-e=5000---c=500---b=100.txt",
-            "a-e=5000---c=500---b=500.txt",
-            "a-e=5000---c=500---b=1000.txt",
+            # "a-e=5000---c=500---b=10.txt",
+            # "a-e=5000---c=500---b=50.txt",
+            # "a-e=5000---c=500---b=100.txt",
+            # "a-e=5000---c=500---b=500.txt",
+            # "a-e=5000---c=500---b=1000.txt",
             # "a-e=5000---c=1000---b=10.txt",
             # "a-e=5000---c=1000---b=50.txt",
             # "a-e=5000---c=1000---b=100.txt",
@@ -106,18 +106,18 @@ if __name__ == "__main__":
                 "shared-atoms-2" : ["rules/shared-atoms-2.txt"],
                 "shared-atoms-3" : ["rules/shared-atoms-3.txt"],
 
-                "num=1--overlap=0": [ "num=1--overlap=0" ], 
-                "num=2--overlap=1": [ "num=2--overlap=1" ], 
-                "num=2--overlap=2": [ "num=2--overlap=2" ], 
-                "num=2--overlap=4": [ "num=2--overlap=4" ], 
-                "num=3--overlap=0": [ "num=3--overlap=0" ], 
-                "num=3--overlap=1": [ "num=3--overlap=1" ], 
-                "num=3--overlap=2": [ "num=3--overlap=2" ], 
-                "num=3--overlap=3": [ "num=3--overlap=3" ], 
-                "num=4--overlap=0": [ "num=4--overlap=0" ], 
-                "num=4--overlap=1": [ "num=4--overlap=1" ], 
-                "num=4--overlap=2": [ "num=4--overlap=2" ], 
-                "num=4--overlap=3": [ "num=4--overlap=3" ], 
+                "num=1--overlap=0": [ "rules/num=1--overlap=0" ], 
+                "num=2--overlap=1": [ "rules/num=2--overlap=1" ], 
+                "num=2--overlap=2": [ "rules/num=2--overlap=2" ], 
+                "num=2--overlap=4": [ "rules/num=2--overlap=4" ], 
+                "num=3--overlap=0": [ "rules/num=3--overlap=0" ], 
+                "num=3--overlap=1": [ "rules/num=3--overlap=1" ], 
+                "num=3--overlap=2": [ "rules/num=3--overlap=2" ], 
+                "num=3--overlap=3": [ "rules/num=3--overlap=3" ], 
+                "num=4--overlap=0": [ "rules/num=4--overlap=0" ], 
+                "num=4--overlap=1": [ "rules/num=4--overlap=1" ], 
+                "num=4--overlap=2": [ "rules/num=4--overlap=2" ], 
+                "num=4--overlap=3": [ "rules/num=4--overlap=3" ], 
     }
 
     test_rule_group = [ "medium" ]
@@ -128,6 +128,7 @@ if __name__ == "__main__":
 
     overlap = [ "shared-atoms-1", "shared-atoms-2", "shared-atoms-3" ]
     overlap = [ 
+                "num=1--overlap=0",
                 "num=1--overlap=0",
                 "num=2--overlap=1",
                 "num=2--overlap=2",
@@ -170,35 +171,21 @@ if __name__ == "__main__":
             log = "../LogGenerator/output/"+log
             for rule_set in rule_sets:
                 parsed_rules = []
+                print(rule_set_names[rule_set])
                 for rule_file in rule_set_names[rule_set]:
                     rules = parse_rule_file(rule_file)
-                    for rule in rules:
-                        print(rule_file)
-                        print("Parsed rule: {}".format(rule))
-                        parsed_rules.append(rule)
+                for rule in rules:
+                    # print("Parsed rule: {}".format(rule))
+                    parsed_rules.append(rule)
 
-                head_to_body = 0
+                head_to_body_overlap = 0
                 for r1 in parsed_rules:
                     for r2 in parsed_rules:
                         for b in r1.body:
                             for h in r2.head:
                                 if isinstance(b, EventAtom) and isinstance(h, EventAtom):
-                                    # print("head_to_body/overlap: {}".format(head_to_body))
-                                    # print("b")
-                                    # print(b)
-                                    # print(b.predicate)
-                                    # print("h")
-                                    # print(h)
-                                    # print(h.predicate)
-                                    # print(b.predicate == h.predicate)
                                     if b.predicate == h.predicate:
-                                        head_to_body += 1
-                                    # print("head_to_body/overlap: {}".format(head_to_body))
-                                    # print()
-                print("rule_set: {}".format(rule_set))
-                print("head_to_body/overlap: {}".format(head_to_body))
-                print()
-                continue
+                                        head_to_body_overlap += 1
 
                 monitor = Monitor(rules=parsed_rules)
 
@@ -217,7 +204,7 @@ if __name__ == "__main__":
                 batch_size = int(matches[2])
                 rule_set += '('+str(len(rule_set_names[rule_set]))+')'
 
-                new_row = {"log-file": log, "rule-set": rule_set, "num-events": num_events, "conc": concurrency, "batch-size": monitor.batch_size, "ave-time": average}
+                new_row = {"log-file": log, "rule-set": rule_set, "num-events": num_events, "conc": concurrency, "batch-size": monitor.batch_size, "overlap": head_to_body_overlap, "ave-time": average}
                 batch_size_values.append(monitor.batch_size)
                 concurrency_values.append(concurrency) 
                 
