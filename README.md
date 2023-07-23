@@ -23,8 +23,18 @@ pip install pandas
 ## Usage
 
 ```shell
-python3 monitor rule_file log_file
+python3 start.py log_file rule_file
 ```
+
+For example:
+
+```shell
+python3 start.py example_logs/small-log-975-events.txt rules/small-rule-1.txt
+```
+
+See rules folder for examples of rule syntax.
+
+See logs folder for examples of log format.
 
 ## Contact
 
