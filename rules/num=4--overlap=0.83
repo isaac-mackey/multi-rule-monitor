@@ -1,0 +1,32 @@
+small_rule_1 = Rule(
+    rule_id=s1,
+    body=[  EventAtom("read", ["v1", "v2"], "x") ],
+    head=[  EventAtom("check_faq", ["v1"], "y"),
+            EventAtom("open_support", ["v1"], "z")
+            ArithmeticAtom("x + 1 < y")
+             ]
+)
+
+small_rule_2 = Rule(
+    rule_id=s2,
+    body=[  EventAtom("check_faq", ["v1"], "x") ],
+    head=[  EventAtom("open_support", ["v1"], "z"),
+            ArithmeticAtom("x + 1 < z"),
+            EventAtom("send_response", ["v1"], "w"),
+            EventAtom("open_trust", ["v1"], "v") ]
+)
+
+small_rule_3 = Rule(
+    rule_id=s3,
+    body=[  EventAtom("open_support", ["v1"], "x") ],
+    head=[  EventAtom("send_response", ["v1"], "w"),
+            EventAtom("open_trust", ["v1"], "v")
+            ArithmeticAtom("x + 1 < w") ]
+)
+
+small_rule_4 = Rule(
+    rule_id=s4,
+    body=[  EventAtom("open_trust", ["v1"], "x") ],
+    head=[  EventAtom("send_response", ["v1"], "w"),
+            ArithmeticAtom("x + 1 < w") ]
+)

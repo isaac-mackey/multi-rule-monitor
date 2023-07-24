@@ -13,17 +13,23 @@ class Monitor:
         self.rule_tables = [RuleTables(rule) for rule in rules]
         self.current_timestamp = 0
         self.batch_size = 1
+        self.violations = []
 
     def process_log_file(self, log_file):
 
         print("Processing log file: {}".format(log_file))
-        matches = re.findall(r'e=(\d+)', log_file)
-        num_events = int(matches[0])
-        matches = re.findall(r'c=(\d+)', log_file)
-        concurrency = int(matches[0])
-        matches = re.findall(r'b=(\d+)', log_file)
-        batch_size = int(matches[0])
-        self.batch_size = batch_size
+        try:
+            matches = re.findall(r'e=(\d+)', log_file)
+            num_events = int(matches[0])
+            matches = re.findall(r'c=(\d+)', log_file)
+            concurrency = int(matches[0])
+            matches = re.findall(r'b=(\d+)', log_file)
+            batch_size = int(matches[0])
+            self.batch_size = batch_size
+        except:
+            num_events = 1000
+            concurrency = 1
+            batch_size = 1
 
         batch_processing_times = []
         batch_counter = 0
@@ -91,6 +97,8 @@ class Monitor:
         for e in new_events:
             if e.event_name == 'END':
                 self.remove_enactment_data(e.data[0])
+
+        # return result
     
     def chase(self):
         new_events = []

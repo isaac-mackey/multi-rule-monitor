@@ -4,6 +4,7 @@ from rule_parser import *
 from event_parser import *
 import datetime
 import pandas as pd
+from edit_rules import *
 
 if __name__ == "__main__":
     
@@ -175,9 +176,6 @@ if __name__ == "__main__":
     else:
         print("Invalid experiment number")
         exit()
-    
-    batch_size_values = []
-    concurrency_values = []
 
     for log in log_file_groups[log_group]:
         log = "../LogGenerator/output/"+log
@@ -186,23 +184,9 @@ if __name__ == "__main__":
             print(rule_set_names[rule_set])
             for rule_file in rule_set_names[rule_set]:
                 rules = parse_rule_file(rule_file)
-            for rule in rules:
-                # print("Parsed rule: {}".format(rule))
-                parsed_rules.append(rule)
-
-            head_to_body_overlap = 0
-            for r1 in parsed_rules:
-                for r2 in parsed_rules:
-                    for b in r1.body:
-                        for h in r2.head:
-                            if isinstance(b, EventAtom) and isinstance(h, EventAtom):
-                                if b.predicate == h.predicate:
-                                    head_to_body_overlap += 1
-
-            # print(rule_set)
-            # print(head_to_body_overlap)
-            # print()
-            # continue
+                for rule in rules:
+                    # print("Parsed rule: {}".format(rule))
+                    parsed_rules.append(rule)
 
             monitor = Monitor(rules=parsed_rules)
 
@@ -220,9 +204,7 @@ if __name__ == "__main__":
             concurrency = int(matches[1])
             batch_size = int(matches[2])
             num_rules = len(parsed_rules)
-            new_row = {"log-file": log, "num-events": num_events, "conc": concurrency, "batch-size": monitor.batch_size, "rule-set": rule_set, "num-rules": num_rules, "overlap": head_to_body_overlap, "ave-time": average}
-            batch_size_values.append(monitor.batch_size)
-            concurrency_values.append(concurrency) 
+            new_row = {"log-file": log, "num-events": num_events, "conc": concurrency, "batch-size": monitor.batch_size, "rule-set": rule_set, "num-rules": num_rules, "overlap": compute_overlap_ruleset(parsed_rules), "ave-time": average}
             
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
             print(df.to_string())
@@ -233,25 +215,3 @@ if __name__ == "__main__":
     print()
     print("Date and time: {}".format(datetime.datetime.now()))
     print(df.to_string())
-
-    # result = ""
-    # result += "Batch Size & "
-    # concurrency_values = sorted(list(set(concurrency_values)))
-    # batch_size_values = sorted(list(set(batch_size_values)))
-    # for concurrency in concurrency_values:
-    #     result += "C="+str(concurrency)+" & "
-    # result = result[:-3] + "\n"
-    # for batch_size in batch_size_values:
-    #     result += str(batch_size)+" & "
-    #     for concurrency in concurrency_values:
-    #         filtered_df = df[(df['batch-size'] == batch_size) & (df['conc'] == concurrency)]
-    #         average_value = 0
-    #         for index, row in filtered_df.iterrows():
-    #             average_value += row['ave-time']
-    #         if len(filtered_df.index):
-    #             average_value /= len(filtered_df.index)
-    #             result += str(average_value) + " & "
-    #         else:
-    #             result += "X & "
-    #     result = result[:-3] + "\n"
-    # print(result)
