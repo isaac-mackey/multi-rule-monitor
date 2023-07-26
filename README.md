@@ -1,8 +1,8 @@
-# Rule Monitor
+# Multi-Rule Monitor
 
 ## Description
 
-A Python implementation of algorithms for monitoring Datalog-like rules as constraints on event logs
+A Python implementation of algorithms for monitoring multiple Datalog-like rules as constraints on event logs
 
 ## Dependencies
 
@@ -14,7 +14,7 @@ The following dependencies are required to run this project:
 pip install z3-solver
 ```
 
-- [pandas](https://pypi.org/project/pandas/): A data manipulation and analysis library for Python. It provides neat data structures for organizing experimental results.
+- [pandas](https://pypi.org/project/pandas/): A data manipulation and analysis library for Python. It provides neat data structures for presenting experimental results.
 
 ```shell
 pip install pandas
