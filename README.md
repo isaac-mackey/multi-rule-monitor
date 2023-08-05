@@ -29,7 +29,7 @@ python3 start.py log_file rule_file
 For example:
 
 ```shell
-python3 start.py example_logs/small-log-975-events.txt rules/small-rule-1.txt
+python3 start.py example_logs/log.txt rules/small-rule-1.txt
 ```
 
 See rules folder for examples of rule syntax.
